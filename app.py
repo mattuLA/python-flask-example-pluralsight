@@ -1,29 +1,43 @@
-import os
-from flask import Flask, render_template, request
+from flask import Flask, send_from_directory
 
-app = Flask(__name__,
-            static_url_path='/website',  # Defines the URL prefix for static files
-            static_folder='website')     # Points to the directory containing static files
+app = Flask(__name__)
+WEBPAGES_FOLDER = 'globomantics-asset-bundle/web-pages'
 
-
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template("index.html")
+    return send_from_directory(WEBPAGES_FOLDER, 'index.html')
 
-@app.route("/home")
-def home():
-    return render_template("Home.html")
+@app.route('/index.html') # Added route for index.html explicitly
+def index_page(): # Added separate function for index.html route
+    return send_from_directory(WEBPAGES_FOLDER, 'index.html')
 
-@app.route("/about")
-def about():
-    return render_template("About.html")
+@app.route('/media.html') # Changed route to '/media.html'
+def media():
+    return send_from_directory(WEBPAGES_FOLDER, 'media.html')
 
-@app.route("/contact")
-def contact():
-    return render_template("Contact.html")
+@app.route('/our-story.html') # Changed route to '/our-story.html'
+def our_story():
+    return send_from_directory(WEBPAGES_FOLDER, 'our-story.html')
 
+@app.route('/robotics.html') # Changed route to '/robotics.html'
+def robotics():
+    return send_from_directory(WEBPAGES_FOLDER, 'robotics.html')
 
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(f'{WEBPAGES_FOLDER}/css', filename)
 
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(f'{WEBPAGES_FOLDER}/js', filename)
 
-if __name__ == "__main__":
+@app.route('/images/<path:filename>')
+def serve_images(filename):
+    return send_from_directory(f'{WEBPAGES_FOLDER}/images', filename)
+
+@app.route('/fonts/<path:filename>')
+def serve_fonts(filename):
+    return send_from_directory(f'{WEBPAGES_FOLDER}/fonts', filename)
+
+if __name__ == '__main__':
     app.run(debug=True)
